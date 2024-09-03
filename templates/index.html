@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BCA 3rd yr Contribution for Teachers Day</title>
+    <style>
+        /* Existing styles */
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            color: #e0e0e0;
+            background-color: #121212;
+            margin: 0;
+            padding: 0;
+        }
+        header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background-color: #1e1e1e;
+            color: #4CAF50;
+            padding: 10px;
+            text-align: center;
+            border-bottom: 1px solid #333;
+            z-index: 1000;
+        }
+        main {
+            margin-top: 80px; /* Adjust for header height */
+            padding: 20px;
+            text-align: center; /* Center-align content within main */
+        }
+        h1 {
+            margin: 0;
+        }
+        table {
+            width: 80%;
+            margin: 55px auto;
+            border-collapse: collapse;
+            background-color: #1e1e1e;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+        }
+        th, td {
+            padding: 5px;
+            border: 1px solid #333;
+        }
+        th {
+            background-color: #333;
+        }
+        td {
+            text-align: center;
+        }
+        form {
+            margin: 20px auto;
+            width: 80%;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            border-radius: 8px;
+        }
+        input[type="text"], select {
+            width: calc(100% - 22px);
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #444;
+            background-color: #333;
+            color: #e0e0e0;
+            border-radius: 4px;
+        }
+        input[type="submit"] {
+            background-color: #4CAF50;
+            color: #e0e0e0;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+        input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+        .login-link {
+            text-decoration: none;
+            background-color: #4CAF50;
+            color: #e0e0e0;
+            padding: 12px 24px;
+            border-radius: 5px;
+            display: inline-block;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin: 20px;
+        }
+        .login-link:hover {
+            background-color: #45a049;
+            transform: scale(1.05);
+        }
+        .login-link:focus {
+            outline: none;
+        }
+        .modify-btn {
+            background-color: #3498db;
+            color: #e0e0e0;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+        .modify-btn:hover {
+            background-color: #2980b9;
+        }
+        .delete-btn {
+            background-color: #b6112c;
+            color: #e0e0e0;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+            margin: 8px;
+        }
+        .delete-btn:hover {
+            background-color: #2980b9;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: #1e1e1e;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
+            z-index: 2000;
+        }
+        .modal-header, .modal-body, .modal-footer {
+            margin-bottom: 10px;
+        }
+        .modal-header h2 {
+            margin: 0;
+        }
+        .modal-footer {
+            text-align: right;
+        }
+        .modal-footer button {
+            background-color: #4CAF50;
+            color: #e0e0e0;
+            padding: 10px 20px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+        .modal-footer button:hover {
+            background-color: #45a049;
+        }
+        .close-btn {
+            background-color: #e74c3c;
+            color: #e0e0e0;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 3px;
+            transition: background-color 0.3s ease;
+        }
+        .close-btn:hover {
+            background-color: #c0392b;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>BCA 3rd yr Contribution for Teachers Day</h1>
+    </header>
+    <main>
+        <table>
+            <thead>
+                <tr>
+                    <th>S.No.</th>
+                    <th>Name</th>
+                    <th>Roll</th>
+                    <th>Payment Status</th>
+                    {% if logged_in %}
+                    <th>Action</th>
+                    {% endif %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for student in students %}
+                <tr>
+                    <td>{{ loop.index }}</td> <!-- Serial number -->
+                    <td>{{ student.name }}</td>
+                    <td>{{ student.roll }}</td>
+                    <td>{{ student.payment_status }}</td>
+                    {% if logged_in %}
+                    <td>
+                        <form action="/delete_student" method="POST" style="display:inline;">
+                            <input type="hidden" name="roll" value="{{ student.roll }}">
+                            <button type="submit" class="delete-btn">Delete</button>
+                        </form>
+                        <button class="modify-btn" onclick="openModal('{{ student.name }}', '{{ student.roll }}', '{{ student.payment_status }}')">Modify</button>
+                    </td>
+                    {% endif %}
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% if logged_in %}
+        <h2>Add New Student</h2>
+        <form action="/add_student" method="POST">
+            <input type="text" name="name" placeholder="Name" required><br>
+            <input type="text" name="roll" placeholder="Roll"><br>
+            <select name="payment_status" required>
+                <option value="✅">✅</option>
+                <option value="❌">❌</option>
+                <option value="pending">pending</option>
+            </select><br>
+            <input type="submit" value="Add Student">
+        </form>
+        <a href="/logout" class="login-link">Logout</a>
+        {% else %}
+        <a href="/login" class="login-link">Login to Add a Student</a>
+        {% endif %}
+    </main>
+
+    <!-- Modal for modifying student data -->
+    <div id="modifyModal" class="modal">
+        <div class="modal-header">
+            <h2>Modify Student</h2>
+        </div>
+        <div class="modal-body">
+            <form id="modifyForm" action="/modify_student" method="POST">
+                <input type="hidden" name="original_roll" id="modifyOriginalRoll">
+                <label for="modifyName">Name:</label>
+                <input type="text" name="name" id="modifyName" required><br>
+                <label for="modifyRoll">Roll:</label>
+                <input type="text" name="roll" id="modifyRoll"><br>
+                <label for="modifyPaymentStatus">Payment Status:</label>
+                <select name="payment_status" id="modifyPaymentStatus" required>
+                    <option value="✅">✅</option>
+                    <option value="❌">❌</option>
+                    <option value="pending">pending</option>
+                </select><br>
+            </form>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="close-btn" onclick="closeModal()">Close</button>
+            <button type="submit" form="modifyForm">Save</button>
+        </div>
+    </div>
+
+    <script>
+        function openModal(name, roll, paymentStatus) {
+            document.getElementById('modifyName').value = name;
+            document.getElementById('modifyRoll').value = roll;
+            document.getElementById('modifyPaymentStatus').value = paymentStatus;
+            document.getElementById('modifyOriginalRoll').value = roll;
+            document.getElementById('modifyModal').style.display = 'block';
+        }
+
+        function closeModal() {
+            document.getElementById('modifyModal').style.display = 'none';
+        }
+
+        // Close the modal if the user clicks outside of it
+        window.onclick = function(event) {
+            if (event.target == document.getElementById('modifyModal')) {
+                closeModal();
+            }
+        }
+    </script>
+</body>
+</html>
